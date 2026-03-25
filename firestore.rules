@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    function isDocOwner() {
+      return isAuthenticated() && request.auth.uid == resource.data.uid;
+    }
+    function isValidScan(data) {
+      return data.keys().hasAll(['uid', 'type', 'content', 'riskScore', 'riskLevel', 'timestamp']) &&
+             data.uid == 'guest' &&
+             data.type in ['email', 'sms', 'url'] &&
+             data.riskScore is int &&
+             data.riskLevel in ['Low', 'Medium', 'High'];
+    }
+
+    // ScanLogs
+    match /scans/{scanId} {
+      allow read: if false; // Private logs
+      allow create: if isValidScan(request.resource.data);
+      allow update, delete: if false;
+    }
+
+    // Reputation Cache (Internal use, but client might need to read)
+    match /reputation/{domainId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only server should write, but for this demo we'll handle it via API
+    }
+  }
+}

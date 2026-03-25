@@ -1,0 +1,40 @@
+{
+  "entities": {
+    "ScanLog": {
+      "title": "ScanLog",
+      "description": "Stores user scan queries and results for phishing detection.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The user ID who performed the scan." },
+        "type": { "type": "string", "enum": ["email", "sms", "url"], "description": "The type of content scanned." },
+        "content": { "type": "string", "description": "The original content scanned." },
+        "riskScore": { "type": "integer", "description": "The calculated risk score (0-100)." },
+        "riskLevel": { "type": "string", "enum": ["Low", "Medium", "High"], "description": "The risk level label." },
+        "explanation": { "type": "string", "description": "AI explanation of the risk." },
+        "timestamp": { "type": "string", "format": "date-time", "description": "When the scan was performed." }
+      },
+      "required": ["uid", "type", "content", "riskScore", "riskLevel", "timestamp"]
+    },
+    "ReputationCache": {
+      "title": "ReputationCache",
+      "description": "Caches domain reputation results.",
+      "type": "object",
+      "properties": {
+        "domain": { "type": "string", "description": "The domain name." },
+        "isBlacklisted": { "type": "boolean", "description": "Whether the domain is known to be malicious." },
+        "lastUpdated": { "type": "string", "format": "date-time", "description": "Last time the reputation was checked." }
+      },
+      "required": ["domain", "isBlacklisted", "lastUpdated"]
+    }
+  },
+  "firestore": {
+    "/scans/{scanId}": {
+      "schema": "ScanLog",
+      "description": "Collection of scan logs."
+    },
+    "/reputation/{domainId}": {
+      "schema": "ReputationCache",
+      "description": "Collection of domain reputation cache."
+    }
+  }
+}

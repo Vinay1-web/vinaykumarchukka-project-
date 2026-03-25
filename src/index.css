@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  body {
+    @apply antialiased selection:bg-black selection:text-white bg-white text-black;
+  }
+}
+
+.glass {
+  @apply bg-white/80 backdrop-blur-xl border-b border-neutral-100;
+}
+
+.mono-card {
+  @apply bg-white border border-neutral-100 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.01)] transition-all duration-500 hover:shadow-[0_8px_30px_rgb(0,0,0,0.02)];
+}
+
+.mono-button {
+  @apply px-4 py-2 rounded-xl text-sm font-bold border transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.mono-input {
+  @apply w-full p-4 bg-neutral-50 border border-neutral-100 rounded-xl focus:ring-1 focus:ring-black focus:border-transparent transition-all outline-none;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes scan {
+  0% { top: 0%; opacity: 0; }
+  50% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(99, 102, 241, 0.1); }
+  50% { box-shadow: 0 0 25px rgba(139, 92, 246, 0.2); }
+}
+
+@keyframes pulse-lite {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.4; }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-scan {
+  animation: scan 2s linear infinite;
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+.animate-pulse-lite {
+  animation: pulse-lite 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
